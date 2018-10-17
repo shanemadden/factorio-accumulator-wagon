@@ -19,8 +19,8 @@ local recipe = {
   ingredients = 
   {
     { "cargo-wagon", 1 },
-    { "accumulator", 20 },
-    { "electronic-circuit", 10 },
+    { "accumulator", 10 },
+    { "electronic-circuit", 5 },
   },
   result = "accumulator-wagon",
 }
@@ -87,6 +87,7 @@ output_accumulator.energy_source.usage_priority = "secondary-output"
 local fluid = {
   type = "fluid",
   name = "battery-fluid",
+  auto_barrel = false,
   default_temperature = 15,
   heat_capacity = "0.1KJ",
   base_color = {r=0.18, g=0.82, b=0.18},
