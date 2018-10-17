@@ -1,0 +1,12 @@
+{
+    "name": "accumulator-wagon",
+    "version": "0.16.0",
+    "title": "Accumulator Wagon",
+    "author": "Shane Madden, Arcani",
+    "homepage": "https://github.com/shanemadden/factorio-accumulator-wagon",
+    "factorio_version": "0.16",
+    "dependencies": [
+        "base >= 0.16.51"
+    ],
+    "description": "Adds a train wagon capable of storing and transporting electric power, allowing transportation of power to remote outposts off the grid"
+}
