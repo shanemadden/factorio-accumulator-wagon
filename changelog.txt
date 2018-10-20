@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.16.1
+Date: 20. 10. 2018
+  Bugfixes:
+    - Fix inactivity conditions not working while empty
+  Info:
+    - Increase capacity of accumulator wagons by an order of magnitude so that each wagon is roughly enough power to mine a cargo wagon worth of ore with base productivity
+    - Fluid in the wagons is now usable as energy storage - the wagons can be charged either through the electric network or by pumping battery fluid into them
+    - Activate wagons when placed if appropriate instead of requiring the train to move
+---------------------------------------------------------------------------------------------------
 Version: 0.16.0
 Date: 17. 10. 2018
   Info:

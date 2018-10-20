@@ -52,7 +52,7 @@ local technology = {
 local wagon = util.table.deepcopy(data.raw["cargo-wagon"]["cargo-wagon"])
 wagon.name = "accumulator-wagon"
 wagon.type = "fluid-wagon"
-wagon.capacity = 100
+wagon.capacity = 25000
 wagon.color = {r = 0.1, g = 0.60, b = 0.1, a = 0.75}
 wagon.icon = "__accumulator-wagon__/graphics/icons/accumulator-wagon.png"
 wagon.inventory_size = 0
@@ -68,9 +68,10 @@ passive_accumulator.selectable_in_game = false
 passive_accumulator.picture.filename = "__accumulator-wagon__/graphics/entity/transparent.png"
 passive_accumulator.charge_animation.filename = "__accumulator-wagon__/graphics/entity/transparent-charge.png"
 passive_accumulator.discharge_animation.filename = "__accumulator-wagon__/graphics/entity/transparent-charge.png"
-passive_accumulator.energy_source.buffer_capacity = "50MJ"
-passive_accumulator.energy_source.input_flow_limit = "3MW"
-passive_accumulator.energy_source.output_flow_limit = "3MW"
+passive_accumulator.energy_source.buffer_capacity = "500MJ"
+-- / 25000 capacity = 20kJ per unit of battery fluid
+passive_accumulator.energy_source.input_flow_limit = "30MW"
+passive_accumulator.energy_source.output_flow_limit = "30MW"
 
 local input_accumulator = util.table.deepcopy(passive_accumulator)
 input_accumulator.name = "accumulator-wagon-proxy-input"

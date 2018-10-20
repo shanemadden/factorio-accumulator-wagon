@@ -67,18 +67,34 @@ local function check_active_wagons(event)
       if config and config.proxy and config.proxy.valid then
         -- train's still here, sync up the indicator fluid
         local fluidbox = entity.fluidbox[1]
-        local old_level
-        if fluidbox then
-          old_level = fluidbox.amount
-        else
-          old_level = -1
+
+        -- compare against last recorded level
+        local prior_level = config.fluid_level or 0
+        local current_level = (fluidbox and fluidbox.amount) or 0
+        -- each point in fluid is 20kJ
+        local energy_change = (current_level - prior_level) * 20000.0
+        -- determine new energy level to set to
+        local target_energy = config.proxy.energy + energy_change
+
+        -- bound it just in case something crazy happened
+        if target_energy < 0 then
+          target_energy = 0
+        elseif target_energy > 500000000 then
+          target_energy = 500000000
         end
-        local new_level = config.proxy.energy / 500000.0    
-        if new_level >= 99.999 then
-          new_level = 100
+
+        -- set it back to the proxy
+        config.proxy.energy = target_energy
+
+        -- now we need to change the fluid level based on the current energy level
+        local new_level = config.proxy.energy / 20000.0
+        -- round it up if it's extremely close to full, to avoid floating point not-quite-full issues
+        if new_level >= 24999.999 then
+          new_level = 25000
         end
+        config.fluid_level = new_level
         -- check difference between old and new level
-        if math.abs(new_level - old_level) >= 0.5 then
+        if math.abs(new_level - current_level) >= 0.5 then
           -- it's changed by at least half a percent, bump the train to refresh inactivity conditions
           refresh_trains[entity.train] = true
         end
@@ -115,14 +131,13 @@ local function check_active_wagons(event)
   end
 end
 
-local function on_train_changed_state(event)
-  local train = event.train
+local function check_train(train)
   if train.state == defines.train_state.wait_station or train.state == defines.train_state.manual_control_stop or (train.state == defines.train_state.manual_control and train.speed == 0) then
     -- we're stopped, make sure we have accumulators
     local station = train.station
     -- first thing is to figure out which type - if we're just parked, always passive, if we're at a station, look for signals
     local proxy_type = "accumulator-wagon-proxy-passive"
-    if station then
+    if station and station.valid then
       -- at a station, check for signals
       local signals = station.get_merged_signals()
       if signals then
@@ -182,7 +197,20 @@ local function on_train_changed_state(event)
     end
   end
 end
+
+local function on_train_changed_state(event)
+  check_train(event.train)
+end
 script.on_event(defines.events.on_train_changed_state, on_train_changed_state)
+
+local function on_built_entity(event)
+  if event.created_entity and event.created_entity.valid and event.created_entity.name == "accumulator-wagon" then
+    check_train(event.created_entity.train)
+  end
+end
+script.on_event(defines.events.on_built_entity, on_built_entity)
+script.on_event(defines.events.on_robot_built_entity, on_built_entity)
+script.on_event(defines.events.script_raised_built, on_built_entity)
 
 local function on_init()
   global.wagons = {}
