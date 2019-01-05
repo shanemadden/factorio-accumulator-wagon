@@ -119,10 +119,12 @@ local function check_active_wagons(event)
     end
   end
 
-  -- bump all marked trains
-  for train in pairs(refresh_trains) do
-    if train.manual_mode == false then
-      train.manual_mode = false
+  if settings.global["accumulator-wagon-update-inactivity-conditions"].value then
+    -- bump all marked trains
+    for train in pairs(refresh_trains) do
+      if train.manual_mode == false then
+        train.manual_mode = false
+      end
     end
   end
   -- unregister if none left

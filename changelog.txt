@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.16.3
+Date: 5. 1. 2019
+  Changes:
+    - No longer bump train mode for inactivity conditions by default since it causes unexpected behavior when stations are disabled while the train is stopped
+    - New option added to re-enable this behavior for anyone who prefers to use inactivity conditions for their accumulator trains
+---------------------------------------------------------------------------------------------------
 Version: 0.16.2
 Date: 19. 12. 2018
   Info:
