@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.16.4
+Date: 8. 1. 2019
+  Bugfixes:
+    - Try to avoid getting stuck with no power but not quite empty liquid tank
+  Changes:
+    - Check priority signals at each sync of parked wagon state
+---------------------------------------------------------------------------------------------------
 Version: 0.16.3
 Date: 5. 1. 2019
   Changes:

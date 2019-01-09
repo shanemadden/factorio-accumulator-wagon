@@ -57,6 +57,35 @@ script.on_event(defines.events.on_pre_player_mined_item, on_entity_gone)
 script.on_event(defines.events.on_entity_died, on_entity_gone)
 script.on_event(defines.events.script_raised_destroy, on_entity_gone)
 
+local function get_proxy_type(train)
+  local station = train.station
+  -- first thing is to figure out which type - if we're just parked, always passive, if we're at a station, look for signals
+  local proxy_type = "accumulator-wagon-proxy-passive"
+  if station and station.valid then
+    -- at a station, check for signals
+    local signals = station.get_merged_signals()
+    if signals then
+      -- some signals present, check them.
+      local charge = false
+      local discharge = false
+      for _, signal_table in ipairs(signals) do
+        if signal_table.signal.name == "accumulator-wagon-charge" and signal_table.count > 0 then
+          charge = true
+        elseif signal_table.signal.name == "accumulator-wagon-discharge" and signal_table.count > 0 then
+          discharge = true
+        end
+      end
+      -- if one and not the other is positive, set the entity type
+      if charge and not discharge then
+        proxy_type = "accumulator-wagon-proxy-input"
+      elseif discharge and not charge then
+        proxy_type = "accumulator-wagon-proxy-output"
+      end
+    end
+  end
+  return proxy_type
+end
+
 -- on_nth_tick function for updating all currently parked accumulator wagons
 local function check_active_wagons(event)
   -- track which trains have a state change so that we can bump their state later, for inactivity conditions
@@ -99,7 +128,7 @@ local function check_active_wagons(event)
           refresh_trains[entity.train] = true
         end
         
-        if new_level > 0 then
+        if new_level > 0.001 then
           -- at least some charge, set the fluid
           entity.fluidbox[1] = {
             name = "battery-fluid",
@@ -108,6 +137,14 @@ local function check_active_wagons(event)
         else
           -- completely discharged, remove the fluid
           entity.fluidbox[1] = nil
+        end
+
+        -- if the signal situation has changed, swap for a proxy of a different type.
+        local proxy_type = get_proxy_type(entity.train)
+        if proxy_type ~= config.proxy.prototype.name then
+          ensure_no_proxy(entity)
+          ensure_proxy(entity, proxy_type)
+          config.proxy.energy = target_energy
         end
       else
         -- proxy went away or config otherwise messed up, remove
@@ -136,31 +173,7 @@ end
 local function check_train(train)
   if train.state == defines.train_state.wait_station or train.state == defines.train_state.manual_control_stop or (train.state == defines.train_state.manual_control and train.speed == 0) then
     -- we're stopped, make sure we have accumulators
-    local station = train.station
-    -- first thing is to figure out which type - if we're just parked, always passive, if we're at a station, look for signals
-    local proxy_type = "accumulator-wagon-proxy-passive"
-    if station and station.valid then
-      -- at a station, check for signals
-      local signals = station.get_merged_signals()
-      if signals then
-        -- some signals present, check them.
-        local charge = false
-        local discharge = false
-        for _, signal_table in ipairs(signals) do
-          if signal_table.signal.name == "accumulator-wagon-charge" and signal_table.count > 0 then
-            charge = true
-          elseif signal_table.signal.name == "accumulator-wagon-discharge" and signal_table.count > 0 then
-            discharge = true
-          end
-        end
-        -- if one and not the other is positive, set the entity type
-        if charge and not discharge then
-          proxy_type = "accumulator-wagon-proxy-input"
-        elseif discharge and not charge then
-          proxy_type = "accumulator-wagon-proxy-output"
-        end
-      end
-    end
+    local proxy_type = get_proxy_type(train)
     -- scan the train for any wagons to add proxies for
     for _, carriage in ipairs(train.fluid_wagons) do
       if carriage.name == "accumulator-wagon" then
