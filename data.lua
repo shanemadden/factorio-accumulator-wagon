@@ -5,7 +5,7 @@ local item = {
   name = "accumulator-wagon",
   icon = "__accumulator-wagon__/graphics/icons/accumulator-wagon.png",
   icon_size = 32,
-  flags = {"goes-to-quickbar"},
+  flags = {},
   subgroup = "transport",
   order = "a[train-system]-gz[accumulator-wagon]",
   place_result = "accumulator-wagon",
@@ -41,8 +41,8 @@ local technology = {
     count = 250,
     ingredients =
     {
-      {"science-pack-1", 1},
-      {"science-pack-2", 1},
+      {"automation-science-pack", 1},
+      {"logistic-science-pack", 1},
     },
     time = 30,
   },
@@ -65,9 +65,17 @@ passive_accumulator.name = "accumulator-wagon-proxy-passive"
 passive_accumulator.order = "z[accumulator-wagon-proxy-passive]"
 passive_accumulator.collision_mask = {"ghost-layer"}
 passive_accumulator.selectable_in_game = false
-passive_accumulator.picture.filename = "__accumulator-wagon__/graphics/entity/transparent.png"
-passive_accumulator.charge_animation.filename = "__accumulator-wagon__/graphics/entity/transparent-charge.png"
-passive_accumulator.discharge_animation.filename = "__accumulator-wagon__/graphics/entity/transparent-charge.png"
+passive_accumulator.picture.layers[1].filename = "__accumulator-wagon__/graphics/entity/transparent.png"
+passive_accumulator.picture.layers[1].hr_version = nil
+passive_accumulator.picture.layers[2] = nil
+passive_accumulator.charge_animation.layers[1].layers[1].filename = "__accumulator-wagon__/graphics/entity/transparent-charge.png"
+passive_accumulator.charge_animation.layers[1].layers[1].hr_version = nil
+passive_accumulator.charge_animation.layers[1].layers[2] = nil
+passive_accumulator.charge_animation.layers[2] = nil
+passive_accumulator.discharge_animation.layers[1].layers[1].filename = "__accumulator-wagon__/graphics/entity/transparent-charge.png"
+passive_accumulator.discharge_animation.layers[1].layers[1].hr_version = nil
+passive_accumulator.discharge_animation.layers[1].layers[2] = nil
+passive_accumulator.discharge_animation.layers[2] = nil
 passive_accumulator.energy_source.buffer_capacity = "500MJ"
 -- / 25000 capacity = 20kJ per unit of battery fluid
 passive_accumulator.energy_source.input_flow_limit = "30MW"
