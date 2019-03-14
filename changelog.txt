@@ -1,18 +1,23 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 14. 03. 2019
+  Changes:
+    - Add Russian translation courtesy of Va7ya
+---------------------------------------------------------------------------------------------------
 Version: 0.17.0
-Date: 27. 2. 2019
+Date: 27. 02. 2019
   Changes:
     - Update for 0.17
 ---------------------------------------------------------------------------------------------------
 Version: 0.16.4
-Date: 8. 1. 2019
+Date: 08. 01. 2019
   Bugfixes:
     - Try to avoid getting stuck with no power but not quite empty liquid tank
   Changes:
     - Check priority signals at each sync of parked wagon state
 ---------------------------------------------------------------------------------------------------
 Version: 0.16.3
-Date: 5. 1. 2019
+Date: 05. 01. 2019
   Changes:
     - No longer bump train mode for inactivity conditions by default since it causes unexpected behavior when stations are disabled while the train is stopped
     - New option added to re-enable this behavior for anyone who prefers to use inactivity conditions for their accumulator trains
