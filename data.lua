@@ -36,7 +36,7 @@ local technology = {
       recipe = "accumulator-wagon"
     }
   },
-  prerequisites = { "railway", "electric-energy-accumulators-1" },
+  prerequisites = { "railway", "electric-energy-accumulators" },
   unit = {
     count = 250,
     ingredients =
