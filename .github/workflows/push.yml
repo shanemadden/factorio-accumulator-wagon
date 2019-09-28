@@ -1,7 +1,7 @@
 on: push
 name: Publish
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
