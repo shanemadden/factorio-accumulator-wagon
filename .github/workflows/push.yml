@@ -1,0 +1,13 @@
+on: push
+name: Publish mod to portal
+jobs:
+  build:
+    name: shanemadden/factorio-mod-portal-publish@master
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: shanemadden/factorio-mod-portal-publish@master
+      uses: shanemadden/factorio-mod-portal-publish@master
+      env:
+        FACTORIO_PASSWORD: ${{ secrets.FACTORIO_PASSWORD }}
+        FACTORIO_USER: ${{ secrets.FACTORIO_USER }}
