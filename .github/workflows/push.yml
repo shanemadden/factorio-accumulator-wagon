@@ -2,7 +2,6 @@ on: push
 name: Publish mod to portal
 jobs:
   build:
-    name: shanemadden/factorio-mod-portal-publish@master
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
