@@ -55,6 +55,7 @@ wagon.type = "fluid-wagon"
 wagon.capacity = 25000
 wagon.color = {r = 0.1, g = 0.60, b = 0.1, a = 0.75}
 wagon.icon = "__accumulator-wagon__/graphics/icons/accumulator-wagon.png"
+wagon.icon_size = 32
 wagon.inventory_size = 0
 wagon.horizontal_doors = nil
 wagon.vertical_doors = nil
